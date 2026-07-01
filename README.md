@@ -6,12 +6,12 @@
 
 A highly optimized, fully customized Joint Embedding Predictive Architecture (JEPA) built from scratch using JAX and Flax. This project explores the use of self-supervised Vision Transformers to learn the biomechanical structure of human cardiac tissue directly from high-resolution ultrasound data.
 
-## 🚨 The Unmet Clinical Need
+## The Unmet Clinical Need
 In modern computational medicine and autonomous surgical robotics, predictive models are bottlenecked by sensor noise. Ultrasound (echocardiography) is portable and non-invasive, but it is notoriously noisy, filled with stochastic speckle patterns, acoustic shadows, and artifact dropouts. 
 
 Traditional generative AI (like Masked Autoencoders) attempts to detect anomalies by reconstructing missing pixels. When applied to ultrasound, these models waste massive computational power attempting to perfectly recreate random acoustic noise, leading to catastrophic false positives. To advance *in silico* medical simulations and robotic interventions, we need foundation models that understand the **underlying anatomical semantics**, completely ignoring the superficial noise.
 
-## 🧠 Why JEPA?
+##  Why JEPA?
 This project utilizes an Image Joint-Embedding Predictive Architecture (I-JEPA). 
 Instead of operating in pixel space, JEPA operates entirely in the **abstract latent space**. 
 1. The model is given a "Context Block" of visible cardiac tissue.
@@ -20,7 +20,7 @@ Instead of operating in pixel space, JEPA operates entirely in the **abstract la
 
 Because the model never reconstructs pixels, it naturally learns to ignore stochastic speckle and focuses entirely on structural geometry and tissue dynamics. To prevent representation collapse, the Target Encoder's weights are strictly updated via an Exponential Moving Average (EMA) of the Context Encoder's weights.
 
-## 📊 The Dataset
+##  The Dataset
 **CAMUS (Cardiac Acquisitions for Multi-structure Ultrasound Segmentation)**
 This architecture was trained on the CAMUS dataset, consisting of high-quality 2D echocardiogram sequences.
 * **Views:** 2-Chamber (2CH) and 4-Chamber (4CH) apical views.
@@ -36,7 +36,7 @@ This architecture was trained on the CAMUS dataset, consisting of high-quality 2
 
 ---
 
-## 🚀 Implementation Journey (Steps Followed)
+##  Implementation Journey (Steps Followed)
 
 ### Phase 1: XLA Tracing & Foundation Building
 * Architected the ViT Encoders and Predictor using `flax.linen`.
@@ -63,7 +63,7 @@ This architecture was trained on the CAMUS dataset, consisting of high-quality 2
 
 ---
 
-## 🔭 Future Roadmap
+##  Future Roadmap
 Building on this JAX baseline, the next stages of development include:
 
 1. **Variance-Covariance Regularization:** Modifying the latent loss function to mathematically force the embeddings to capture high-fidelity tissue textures, eliminating the low-frequency bias.
