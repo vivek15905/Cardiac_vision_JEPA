@@ -65,10 +65,10 @@ flowchart TB
     C_Enc -. "EMA Update (Tau)" .-> T_Enc
 
     %% Styling
-    classDef encoder fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
-    classDef predictor fill:#fff3e0,stroke:#e65100,stroke-width:2px;
-    classDef data fill:#f3e5f5,stroke:#4a148c,stroke-width:1px;
-    classDef loss fill:#ffebee,stroke:#b71c1c,stroke-width:2px;
+    classDef encoder fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000000;
+    classDef predictor fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000000;
+    classDef data fill:#4a148c,stroke:#311b92,stroke-width:2px,color:#ffffff;
+    classDef loss fill:#ffebee,stroke:#b71c1c,stroke-width:2px,color:#000000;
 
     class C_Enc,T_Enc encoder;
     class Pred predictor;
