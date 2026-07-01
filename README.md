@@ -27,12 +27,52 @@ This architecture was trained on the CAMUS dataset, consisting of high-quality 2
 * **Preprocessing:** Native 384x384 frames dynamically resized to 256x256 tensors via PyTorch transforms, normalized to `mean=0.5, std=0.5`.
 * **Self-Supervised Setup:** Ground-truth segmentation masks were explicitly ignored. The model learns purely from the raw physical ultrasound frames.
 
-## ⚙️ Architecture Specifications
+##  Architecture Specifications
 * **Framework:** JAX / Flax / Optax
 * **Hardware:** Compiled for TPU v2 / NVIDIA T4 GPUs via XLA.
 * **Encoders:** Vision Transformers (ViT) patchified into 16x16 grids.
 * **Masking Strategy:** Spatially disjoint block masking (1 large contiguous Context Block, up to 4 disjoint Target Blocks).
 * **Data Pipeline:** PyTorch `DataLoader` yielding asynchronous batches converted to NumPy arrays for JAX ingestion.
+
+### Computational Graph (Vision-JEPA)
+```mermaid
+flowchart TB
+    Input[Ultrasound Frame 256x256] --> Masking{Spatial Block Masking}
+
+    %% Context Branch
+    Masking -- "Context Blocks (Visible)" --> C_Patches[Context Patches]
+    C_Patches --> C_Enc[Context Encoder ViT]
+    C_Enc --> C_Embed[Context Embeddings]
+
+    %% Target Branch
+    Masking -- "Target Blocks (Hidden)" --> T_Patches[Target Patches]
+    T_Patches --> T_Enc[Target Encoder ViT]
+    T_Enc -- "Stop Gradient" --> T_Embed[Actual Target Embeddings]
+
+    %% Prediction
+    C_Embed --> Pred[Predictor ViT]
+    Mask_Tokens[Mask Tokens + Positional Encodings] --> Pred
+    Pred --> Pred_Embed[Predicted Target Embeddings]
+
+    %% Loss & Updates
+    Pred_Embed --> Loss((L2 Latent Loss))
+    T_Embed --> Loss
+
+    %% Parameter Updates
+    Loss -. "Backprop (AdamW)" .-> C_Enc
+    Loss -. "Backprop (AdamW)" .-> Pred
+    C_Enc -. "EMA Update (Tau)" .-> T_Enc
+
+    %% Styling
+    classDef encoder fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef predictor fill:#fff3e0,stroke:#e65100,stroke-width:2px;
+    classDef data fill:#f3e5f5,stroke:#4a148c,stroke-width:1px;
+    classDef loss fill:#ffebee,stroke:#b71c1c,stroke-width:2px;
+
+    class C_Enc,T_Enc encoder;
+    class Pred predictor;
+    class Input,C_Patches,T_Patches,C_Embed,T_Embed,Pred_Embed,Mask_Tokens data;
+    class Loss loss;
 
 ---
 
