@@ -73,8 +73,8 @@ flowchart TB
     class Pred predictor;
     class Input,C_Patches,T_Patches,C_Embed,T_Embed,Pred_Embed,Mask_Tokens data;
     class Loss loss;
+```
 
----
 
 ##  Implementation Journey (Steps Followed)
 
