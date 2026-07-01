@@ -35,6 +35,8 @@ This architecture was trained on the CAMUS dataset, consisting of high-quality 2
 * **Data Pipeline:** PyTorch `DataLoader` yielding asynchronous batches converted to NumPy arrays for JAX ingestion.
 
 ### Computational Graph (Vision-JEPA)
+### Computational Graph (Vision-JEPA)
+
 ```mermaid
 flowchart TB
     Input[Ultrasound Frame 256x256] --> Masking{Spatial Block Masking}
@@ -73,9 +75,7 @@ flowchart TB
     class Pred predictor;
     class Input,C_Patches,T_Patches,C_Embed,T_Embed,Pred_Embed,Mask_Tokens data;
     class Loss loss;
-```` ``` ````
 
-```
 
 
 ##  Implementation Journey (Steps Followed)
